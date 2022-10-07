@@ -17,4 +17,10 @@ evnp.envVars.each { e ->
   println e
 }
 
-null
+// Remove Vars
+def envVars = Jenkins.get().globalNodeProperties[0].envVars
+def varsToRemove = ["FOO", "Bar"]
+varsToRemove.each {envVars.remove(it)}
+
+// Add Vars
+envVars.put("FOO", "foo")
