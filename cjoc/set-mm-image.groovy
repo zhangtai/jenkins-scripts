@@ -4,12 +4,12 @@ import com.cloudbees.opscenter.server.model.ManagedMaster
 
 def jenkins  = Jenkins.get()
 jenkins.allItems(ManagedMaster).each { c ->
-  
-  // Set controller image
   // c.configuration is from master-provisioning-kubernetes.jar
   //     com.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning
-  c.configuration.setImage('CloudBees CI - Managed Controller - 2.361.4.1')
-  // .c.properties[0].properties.bundle  // Check bundle config
+  def cc = c.configuration
+  println "${c.name}: ${cc.cpus}/${cc.memory}/${cc.disk}"
+
+  // .properties[0].properties.bundle  // Check bundle config
   // .configuration.yaml
   // .stopAction(false)
   // .provisionAndStartAction()
@@ -17,10 +17,11 @@ jenkins.allItems(ManagedMaster).each { c ->
   // .resource
   // .resource.isStale()
 
-  // Stop all stale controllers
-  // if (c.resource?.isStale() && c.state.name() == "APPROVED") c.stopAction(false)
-
-  // Start all stopped controllers
-  // if (c.state.name() == "CREATED") println(c.provisionAndStartAction())
+  // Update all controller image
+  c.configuration.setImage('CloudBees CI - Managed Controller - 2.361.4.1')
+      // Stop all stale controllers
+  if (c.resource?.isStale() && c.state.name() == "APPROVED") c.stopAction(false)
+      // Start all stopped controllers
+  if (c.state.name() == "CREATED") println(c.provisionAndStartAction())
   c.save()
 }
