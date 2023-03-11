@@ -1,0 +1,1 @@
+hudson.node_monitors.DiskSpaceMonitor.DESCRIPTOR.get(Jenkins.get().computers[0]).gbLeft
