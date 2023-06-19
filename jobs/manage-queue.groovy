@@ -13,15 +13,15 @@ println "Group by nodes"
 assignees.each { k, v -> println "    ${k}: ${v}" }
 
 
-def count = 0
+def waitingCount = 0
 q.items.each {
-  def runningHours = (now - it.inQueueSince) / 1000 / 60 / 60
-  if (runningHours > 24) {
-    count += 1
+  def waitingHours = (now - it.inQueueSince) / 1000 / 60 / 60
+  if (waitingHours > 24) {
+    waitingCount += 1
     q.cancel(it.task)
   }
 }
-println "${count} queue items over 24 hours cleared"
+println "${waitingCount} queue items over 24 hours cleared"
 
 // .inQueueSince
 return
